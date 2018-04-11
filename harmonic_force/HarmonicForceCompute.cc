@@ -139,15 +139,10 @@ void HarmonicForceCompute::setForces()
         Scalar norm_dq = norm2(dq);
         Scalar4 d_rot = quat_to_scalar4(dq);
 
-        int3 dummy = make_int3(0,0,0);
-        vec3<Scalar> origin(m_pdata->getOrigin());
         vec3<Scalar> position(h_position.data[idx]);
         const BoxDim& box = this->m_pdata->getGlobalBox();
-        vec3<Scalar> r0(h_position_lattice.data[idx]);
-        Scalar3 t = vec_to_scalar3(position - origin);
-        box.wrap(t, dummy);
-        vec3<Scalar> shifted_pos(t);
-        vec3<Scalar> dr = vec3<Scalar>(box.minImage(vec_to_scalar3(r0 - position + origin)));
+        vec3<Scalar> r0(h_position_lattice.data[i]);
+        vec3<Scalar> dr = vec3<Scalar>(box.minImage(vec_to_scalar3(position - r0)));
 
         h_force.data[idx].x = -force_constant * dr.x;
         h_force.data[idx].y = -force_constant * dr.y;
