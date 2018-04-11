@@ -1,0 +1,5 @@
+name: hoomd-plugins
+dependencies:
+  - python=3.6.1
+  - numpy=1.14.1
+  - glotzer::hoomd=2.2.2
