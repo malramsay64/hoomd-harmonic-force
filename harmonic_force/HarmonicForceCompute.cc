@@ -134,7 +134,7 @@ void HarmonicForceCompute::setForces()
         unsigned int tag = m_group->getMemberTag(i);
         unsigned int idx = h_rtag.data[tag];
 
-        quat<Scalar> q0(h_orientation_lattice.data[idx]);
+        quat<Scalar> q0(h_orientation_lattice.data[i]);
         quat<Scalar> dq = q0 - quat<Scalar>(h_orientation.data[idx]);
         Scalar norm_dq = norm2(dq);
         Scalar4 d_rot = quat_to_scalar4(dq);
