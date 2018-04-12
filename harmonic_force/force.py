@@ -8,7 +8,8 @@ from ._harmonic_force import HarmonicForceCompute as cpp_HarmonicForceCompute
 
 class HarmonicForceCompute(_force):
     """Harmonic Force"""
-    def __init__(self, group, lattice_positions, lattice_orientations, force_constant):
+    def __init__(self, group, lattice_positions, lattice_orientations, translational_force_constant,
+                 rotational_force_constant):
         hoomd.util.print_status_line()
         hoomd.context.msg.notice(2, 'Setting up HarmonicForceCompute\n')
 
@@ -21,13 +22,15 @@ class HarmonicForceCompute(_force):
             group.cpp_group,
             [tuple(row) for row in lattice_positions],
             [tuple(row) for row in lattice_orientations],
-            force_constant
+            translational_force_constant,
+            rotational_force_constant
         )
 
         self.group = group
         self.lattice_positions = lattice_positions
         self.lattice_orientations = lattice_orientations
-        self.force_constant = force_constant
+        self.translational_force_constant = translational_force_constant
+        self.rotational_force_constant = rotational_force_constant
 
         hoomd.context.current.system.addCompute(self.cpp_force, self.force_name)
         hoomd.context.msg.notice(2, 'Forces added to system\n')

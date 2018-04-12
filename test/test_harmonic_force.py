@@ -61,7 +61,7 @@ def test_HarmonicForceCompute(simulation_setup):
     intended_orientation = snap_init.particles.orientation[:nmols] - np.array(
         [-delta, 0, 0, delta]
     )
-    HarmonicForceCompute(group, intended_position, intended_orientation, 10.)
+    HarmonicForceCompute(group, intended_position, intended_orientation, 10., 10.)
     hoomd.run(1000)
     snap_final = simulation_setup["system"].take_snapshot()
     assert np.all(np.linalg.norm(

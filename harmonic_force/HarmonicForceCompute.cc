@@ -19,8 +19,10 @@ HarmonicForceCompute::HarmonicForceCompute(
         std::shared_ptr<ParticleGroup> group,
         py::list position_lattice,
         py::list orientation_lattice,
-        Scalar force_constant
-        ) : ForceCompute(sysdef), m_group(group), force_constant(force_constant)
+        Scalar translational_force_constant,
+        Scalar rotational_force_constant
+        ) : ForceCompute(sysdef), m_group(group), translational_force_constant(translational_force_constant),
+    rotational_force_constant(rotational_force_constant)
 {
     unsigned int group_size = m_group->getNumMembersGlobal();
     if (group_size == 0)
@@ -134,27 +136,34 @@ void HarmonicForceCompute::setForces()
         unsigned int tag = m_group->getMemberTag(i);
         unsigned int idx = h_rtag.data[tag];
 
-        quat<Scalar> q0(h_orientation_lattice.data[i]);
-        quat<Scalar> dq = quat<Scalar>(h_orientation.data[idx]) - q0;
-        Scalar v_norm = slow::sqrt(dot(dq.v, dq.v));
-        Scalar q_norm(0);
-        if (v_norm > 0) 
+        if (rotational_force_constant == 0)
         {
-            q_norm = 2 * acos(dq.s) / v_norm;
+            quat<Scalar> q0(h_orientation_lattice.data[i]);
+            quat<Scalar> dq = quat<Scalar>(h_orientation.data[idx]) - q0;
+            Scalar v_norm = slow::sqrt(dot(dq.v, dq.v));
+            Scalar q_norm(0);
+            if (v_norm > 0) 
+            {
+                q_norm = 2 * acos(dq.s) / v_norm;
+            }
+
+            h_torque.data[idx].x = -rotational_force_constant * q_norm * dq.v.x;
+            h_torque.data[idx].y = -rotational_force_constant * q_norm * dq.v.y;
+            h_torque.data[idx].z = -rotational_force_constant * q_norm * dq.v.z;
         }
 
-        vec3<Scalar> position(h_position.data[idx]);
-        const BoxDim& box = this->m_pdata->getGlobalBox();
-        vec3<Scalar> r0(h_position_lattice.data[i]);
-        vec3<Scalar> dr = vec3<Scalar>(box.minImage(vec_to_scalar3(position - r0)));
+        if (translational_force_constant == 0)
+        {
+            vec3<Scalar> position(h_position.data[idx]);
+            const BoxDim& box = this->m_pdata->getGlobalBox();
+            vec3<Scalar> r0(h_position_lattice.data[i]);
+            vec3<Scalar> dr = vec3<Scalar>(box.minImage(vec_to_scalar3(position - r0)));
 
-        h_force.data[idx].x = -force_constant * dr.x;
-        h_force.data[idx].y = -force_constant * dr.y;
-        h_force.data[idx].z = -force_constant * dr.z;
+            h_force.data[idx].x = -translational_force_constant * dr.x;
+            h_force.data[idx].y = -translational_force_constant * dr.y;
+            h_force.data[idx].z = -translational_force_constant * dr.z;
+        }
 
-        h_torque.data[idx].x = -force_constant * q_norm * dq.v.x;
-        h_torque.data[idx].y = -force_constant * q_norm * dq.v.y;
-        h_torque.data[idx].z = -force_constant * q_norm * dq.v.z;
     }
 }
 
@@ -181,6 +190,6 @@ void HarmonicForceCompute::computeForces(unsigned int timestep)
 void export_HarmonicForceCompute(py::module& m)
 {
     py::class_< HarmonicForceCompute, std::shared_ptr<HarmonicForceCompute> >(m, "HarmonicForceCompute", py::base<ForceCompute>())
-        .def(py::init< std::shared_ptr<SystemDefinition>, std::shared_ptr<ParticleGroup>, py::list, py::list, Scalar >())
+        .def(py::init< std::shared_ptr<SystemDefinition>, std::shared_ptr<ParticleGroup>, py::list, py::list, Scalar, Scalar >())
         ;
 }

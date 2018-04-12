@@ -25,7 +25,8 @@ class HarmonicForceCompute : public ForceCompute
         HarmonicForceCompute(std::shared_ptr<SystemDefinition> sysdef,
                              std::shared_ptr<ParticleGroup> group,
                              pybind11::list p_lst, pybind11::list o_lst,
-                             Scalar force_constant
+                             Scalar translational_force_constant,
+                             Scalar rotational_force_constant
                              );
 
         //! Destructor
@@ -44,7 +45,8 @@ class HarmonicForceCompute : public ForceCompute
         GPUArray<Scalar3> m_position_lattice;
         GPUArray<Scalar4> m_orientation_lattice;
 
-        Scalar force_constant;
+        Scalar translational_force_constant;
+        Scalar rotational_force_constant;
 
         unsigned int last_computed;
 
