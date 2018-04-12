@@ -1,2 +1,5 @@
 # build files
 build
+
+# test files
+.pytest_cache/
