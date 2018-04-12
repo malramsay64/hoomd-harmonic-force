@@ -135,9 +135,13 @@ void HarmonicForceCompute::setForces()
         unsigned int idx = h_rtag.data[tag];
 
         quat<Scalar> q0(h_orientation_lattice.data[i]);
-        quat<Scalar> dq = q0 - quat<Scalar>(h_orientation.data[idx]);
-        Scalar norm_dq = norm2(dq);
-        Scalar4 d_rot = quat_to_scalar4(dq);
+        quat<Scalar> dq = quat<Scalar>(h_orientation.data[idx]) - q0;
+        Scalar v_norm = slow::sqrt(dot(dq.v, dq.v));
+        Scalar q_norm(0);
+        if (v_norm > 0) 
+        {
+            q_norm = 2 * acos(dq.s) / v_norm;
+        }
 
         vec3<Scalar> position(h_position.data[idx]);
         const BoxDim& box = this->m_pdata->getGlobalBox();
@@ -148,10 +152,9 @@ void HarmonicForceCompute::setForces()
         h_force.data[idx].y = -force_constant * dr.y;
         h_force.data[idx].z = -force_constant * dr.z;
 
-        h_torque.data[idx].x = -force_constant * norm_dq * d_rot.x;
-        h_torque.data[idx].y = -force_constant * norm_dq * d_rot.y;
-        h_torque.data[idx].z = -force_constant * norm_dq * d_rot.z;
-
+        h_torque.data[idx].x = -force_constant * q_norm * dq.v.x;
+        h_torque.data[idx].y = -force_constant * q_norm * dq.v.y;
+        h_torque.data[idx].z = -force_constant * q_norm * dq.v.z;
     }
 }
 
