@@ -1,0 +1,38 @@
+package:
+  name: hoomd-harmonic-force
+  version: v0.1.0
+
+about:
+  home: https://github.com/malramsay64/hoomd-harmonic-force
+  license: MIT
+  license_file: LICENSE
+
+source:
+  git_url: https://github.com/malramsay64/hoomd-harmonic-force.git
+  git_rev: v0.1.0
+
+requirements:
+  build:
+    - python {{ python }}
+    - numpy {{ numpy }}
+    - setuptools 36.*
+    - hoomd 2.2*
+    - cmake
+
+  run:
+    - {{ pin_compatible('python', max_pin='x.x') }}
+    - {{ pin_compatible('numpy', max_pin='x.x.x') }}
+    - {{ pin_compatible('hoomd', max_pin='x.x.x') }}
+
+build:
+  preserve_egg_dir: True
+  script: make clean && make install
+  number: 0
+
+test:
+  requires:
+    - pytest
+  source_files:
+    - test/*
+  commands:
+    - make test
