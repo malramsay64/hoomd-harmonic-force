@@ -14,6 +14,10 @@ install: all
 clean:
 	rm -rf $(build_dir)
 
+test: install
+	pytest
+
+
 $(build_dir):
 	mkdir -p $@
 
