@@ -27,7 +27,7 @@ requirements:
 build:
   preserve_egg_dir: True
   script: make clean && make install
-  number: 0
+  number: {{ GIT_DESCRIBE_NUMBER }}
 
 test:
   requires:
