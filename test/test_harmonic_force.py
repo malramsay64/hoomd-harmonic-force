@@ -18,7 +18,7 @@ from hoomd.harmonic_force import HarmonicForceCompute
 
 @pytest.fixture(params=itertools.product([-0.1, 0, 0.1, 0.4], [True, False]))
 def simulation_setup(delta: float = 0, create_rigid: bool = False):
-    with hoomd.context.initialize(''):
+    with hoomd.context.initialize(""):
         unit_cell = hoomd.lattice.unitcell(
             N=1,
             a1=[2, 0, 0],
@@ -64,9 +64,10 @@ def test_HarmonicForceCompute(simulation_setup):
     HarmonicForceCompute(group, intended_position, intended_orientation, 10., 10.)
     hoomd.run(1000)
     snap_final = simulation_setup["system"].take_snapshot()
-    assert np.all(np.linalg.norm(
-        snap_final.particles.position[:nmols] - intended_position
-    ) < 0.01)
-    assert np.all(np.linalg.norm(
-        snap_final.particles.orientation[:nmols] - intended_orientation
-    ) < 0.01)
+    assert np.all(
+        np.linalg.norm(snap_final.particles.position[:nmols] - intended_position) < 0.01
+    )
+    assert np.all(
+        np.linalg.norm(snap_final.particles.orientation[:nmols] - intended_orientation)
+        < 0.01
+    )

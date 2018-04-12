@@ -8,10 +8,17 @@ from ._harmonic_force import HarmonicForceCompute as cpp_HarmonicForceCompute
 
 class HarmonicForceCompute(_force):
     """Harmonic Force"""
-    def __init__(self, group, lattice_positions, lattice_orientations, translational_force_constant,
-                 rotational_force_constant):
+
+    def __init__(
+        self,
+        group,
+        lattice_positions,
+        lattice_orientations,
+        translational_force_constant,
+        rotational_force_constant,
+    ):
         hoomd.util.print_status_line()
-        hoomd.context.msg.notice(2, 'Setting up HarmonicForceCompute\n')
+        hoomd.context.msg.notice(2, "Setting up HarmonicForceCompute\n")
 
         # initialize base class
         super().__init__()
@@ -23,7 +30,7 @@ class HarmonicForceCompute(_force):
             [tuple(row) for row in lattice_positions],
             [tuple(row) for row in lattice_orientations],
             translational_force_constant,
-            rotational_force_constant
+            rotational_force_constant,
         )
 
         self.group = group
@@ -33,7 +40,7 @@ class HarmonicForceCompute(_force):
         self.rotational_force_constant = rotational_force_constant
 
         hoomd.context.current.system.addCompute(self.cpp_force, self.force_name)
-        hoomd.context.msg.notice(2, 'Forces added to system\n')
+        hoomd.context.msg.notice(2, "Forces added to system\n")
 
     def update_coeffs(self):
         pass
