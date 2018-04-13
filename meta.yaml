@@ -1,6 +1,6 @@
 package:
   name: hoomd-harmonic-force
-  version: v0.1.1
+  version: 0.1.1
 
 about:
   home: https://github.com/malramsay64/hoomd-harmonic-force
