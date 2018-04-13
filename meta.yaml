@@ -17,12 +17,14 @@ requirements:
     - numpy {{ numpy }}
     - setuptools 36.*
     - hoomd 2.2*
+    - cudatoolkit {{ cuda }}
     - cmake
 
   run:
     - {{ pin_compatible('python', max_pin='x.x') }}
     - {{ pin_compatible('numpy', max_pin='x.x.x') }}
     - {{ pin_compatible('hoomd', max_pin='x.x.x') }}
+    - {{ pin_compatible('cudatoolkit', max_pin='x') }}
 
 build:
   preserve_egg_dir: True

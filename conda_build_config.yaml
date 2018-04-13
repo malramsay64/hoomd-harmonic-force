@@ -3,3 +3,6 @@ python:
 
 numpy:
   - 1.14
+
+cuda:
+  - 8.0
