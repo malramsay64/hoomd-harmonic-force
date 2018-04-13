@@ -99,11 +99,6 @@ HarmonicForceCompute::HarmonicForceCompute(
 
   last_computed = 10;
 
-  // broadcast the seed from rank 0 to all other ranks.
-#ifdef ENABLE_MPI
-  if (this->m_pdata->getDomainDecomposition())
-    bcast(m_seed, 0, this->m_exec_conf->getMPICommunicator());
-#endif
 }
 
 HarmonicForceCompute::~HarmonicForceCompute() {
