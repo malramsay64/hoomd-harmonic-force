@@ -17,6 +17,10 @@ clean:
 test: install
 	pytest
 
+debug: $(build_dir)
+	cd $(build_dir); cmake .. -DENABLE_CUDA=False -DCMAKE_BUILD_TYPE=DEBUG
+	$(MAKE) -C $(build_dir) install
+
 
 $(build_dir):
 	mkdir -p $@
