@@ -14,7 +14,7 @@ install: all
 clean:
 	rm -rf $(build_dir)
 
-test: install
+test:
 	pytest
 
 debug: $(build_dir)
@@ -26,6 +26,7 @@ $(build_dir):
 	mkdir -p $@
 
 
+.PHONY: test clean
 
 # vim:ft=make
 #
