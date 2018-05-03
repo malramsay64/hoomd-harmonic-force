@@ -5,7 +5,7 @@
 build_dir = build
 
 all: $(build_dir)
-	cd $(build_dir); cmake .. -DENABLE_CUDA=False
+	cd $(build_dir); cmake .. -DENABLE_CUDA=True
 	$(MAKE) -C $(build_dir)
 
 install: all
