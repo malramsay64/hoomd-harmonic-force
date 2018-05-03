@@ -7,10 +7,6 @@ set(_${COMPONENT_NAME}_sources
     HarmonicForceCompute.cc
     )
 
-set(_${COMPONENT_NAME}_cu_sources
-    HarmonicForceCompute.cu
-    )
-
 # Need to define NO_IMPORT_ARRAY in every file but module.cc
 set_source_files_properties(${_${COMPONENT_NAME}_sources} ${_${COMPONENT_NAME}_cu_sources} PROPERTIES COMPILE_DEFINITIONS NO_IMPORT_ARRAY)
 
