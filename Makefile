@@ -4,8 +4,18 @@
 #
 build_dir = build
 
+# Check OS to determine if CUDA is enabled, defaults to True
+CUDA_ENABLED=True
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	CUDA_ENABLED=True
+endif
+ifeq ($(UNAME_S),Darwin)
+	CUDA_ENABLED=False
+endif
+
 all: $(build_dir)
-	cd $(build_dir); cmake .. -DENABLE_CUDA=True
+	cd $(build_dir); cmake .. -DENABLE_CUDA=$(CUDA_ENABLED)
 	$(MAKE) -C $(build_dir)
 
 install: all
