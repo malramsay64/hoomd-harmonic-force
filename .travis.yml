@@ -20,18 +20,14 @@ install:
 
   - conda env update
   - source activate hoomd-plugins
-  - pip install -e .
-  - conda install -c conda-forge codecov
+  - make
+  - make install
 
 script:
     - pytest
 
-after_success:
-    - codecov
-
 before_deploy:
     - conda install -n root anaconda-client conda-build
-    - conda config --append channels moble
     - conda config --append channels glotzer
     - conda config --append channels malramsay
     - chmod +x scripts/deploy_anaconda.sh
