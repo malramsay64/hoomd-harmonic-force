@@ -1,6 +1,6 @@
 name: hoomd-plugins
 dependencies:
-  - python=3.6.1
+  - python=3.6
   - numpy=1.14.1
   - glotzer::hoomd=2.3
   - cudatoolkit=8.0
