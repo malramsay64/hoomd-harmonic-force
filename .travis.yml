@@ -1,0 +1,42 @@
+language: generic
+matrix:
+  include:
+    - os: linux
+      before_install:
+        - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    - os: osx
+        - wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+
+install:
+  - bash miniconda.sh -b -u -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda install conda-env
+  # Useful for debugging any issues with conda
+  - conda info -a
+
+  - conda env update
+  - source activate hoomd-plugins
+  - pip install -e .
+  - conda install -c conda-forge codecov
+
+script:
+    - pytest
+
+after_success:
+    - codecov
+
+before_deploy:
+    - conda install -n root anaconda-client conda-build
+    - conda config --append channels moble
+    - conda config --append channels glotzer
+    - conda config --append channels malramsay
+    - chmod +x scripts/deploy_anaconda.sh
+
+deploy:
+    provider: script
+    script: ./scripts/deploy_anaconda.sh
+    on:
+        tags: true
