@@ -28,6 +28,9 @@ requirements:
 
 build:
   preserve_egg_dir: True
+  script_env:
+    - CC
+    - LD_LIBRARY_PATH
   script: make clean && make install
   number: {{ GIT_DESCRIBE_NUMBER }}
 

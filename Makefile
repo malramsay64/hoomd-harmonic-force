@@ -4,6 +4,9 @@
 #
 build_dir = build
 
+# Set shell to bash to allow module command
+SHELL:=/bin/bash
+
 # Check OS to determine if CUDA is enabled, defaults to True
 CUDA_ENABLED=True
 UNAME_S := $(shell uname -s)
@@ -27,12 +30,15 @@ clean:
 test:
 	pytest
 
+conda-build:
+	module load gcc/4.8.4 cuda/8.0.44 && export CC=/usr/local/gcc/4.8.4/bin/gcc
+	conda build .
 
 $(build_dir):
 	mkdir -p $@
 
 
-.PHONY: test clean
+.PHONY: test clean conda-build
 
 # vim:ft=make
 #
