@@ -16,7 +16,7 @@ requirements:
     - python {{ python }}
     - numpy {{ numpy }}
     - setuptools 36.*
-    - hoomd 2.3
+    - hoomd 2.3.0
     - cudatoolkit {{ cuda }}
     - cmake
 
