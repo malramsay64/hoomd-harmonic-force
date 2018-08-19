@@ -32,7 +32,7 @@ build:
     - CC
     - LD_LIBRARY_PATH
   script: make clean && make install
-  number: {{ GIT_DESCRIBE_NUMBER }}
+  number: 0
 
 test:
   requires:
